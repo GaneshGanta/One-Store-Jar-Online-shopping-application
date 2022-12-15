@@ -1,5 +1,6 @@
 package com.onestore.exception;
 
+
 public class LoginException extends RuntimeException{
 	
 	String message;
@@ -14,5 +15,6 @@ public class LoginException extends RuntimeException{
 	}
 	
 	
+
 
 }
