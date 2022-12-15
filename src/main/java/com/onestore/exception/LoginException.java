@@ -1,12 +1,20 @@
 package com.onestore.exception;
 
-public class LoginException extends Exception{
 
+public class LoginException extends RuntimeException{
+	
+	String message;
+	
 	public LoginException() {
-		// TODO Auto-generated constructor stub
+		
+	}
+
+	public LoginException(String message) {
+		super(message);
+		
 	}
 	
-	public LoginException(String msg) {
-		super(msg);
-	}
+	
+
+
 }
