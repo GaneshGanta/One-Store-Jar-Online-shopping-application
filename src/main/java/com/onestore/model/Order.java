@@ -36,8 +36,8 @@ public class Order{
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "order")
-	private List<Product> productList;
+//	@OneToMany(cascade = CascadeType.ALL,mappedBy = "order")
+//	private List<Product> productList;
 	
 	@Embedded
 	private Address address;
