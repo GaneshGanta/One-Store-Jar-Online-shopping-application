@@ -1,52 +1,46 @@
 package com.onestore.model;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
-import antlr.collections.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.NoArgsConstructor; 
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
 public class Cart {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer cartId;
-		
-	@OneToMany(cascade = CascadeType.ALL)
-	private java.util.List<Product> products;
 	
-	/*
-	 
-	 * add customer one to one.
-	 * 
-	 */
+//	@NotNull(message = "Customer details cannot be left blank")
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Customer customer;
+	
+//	@NotNull(message = "Please select atleast one product")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
+	private List<Product> products;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Product product;
 
-	public Cart(java.util.List<Product> products) {
-		super();
-		this.products = products;
-	}
-	
-	
-	
 	
 }

@@ -1,51 +1,53 @@
 package com.onestore.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-public class Order{
-	
-	
+@AllArgsConstructor
+@Table(name = "orders")
+public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer orderId;
-	private LocalDateTime orderDate;
+	
+//	@NotNull(message = "{date.invalid}")
+	private LocalDate orderDate;
+	
+//	@NotNull(message = "{status.invalid}")
 	private String orderStatus;
 	
+//	@NotNull(message = "{customer.invalid}")
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "order")
+//	@NotNull(message = "{product.invalid}")
+	@JsonIgnore
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<Product> productList;
 	
-	@Embedded
+//	@NotNull(message = "{address.invalid}")
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;
-	
-	
-	
-	
-	
-	
 	
 }
