@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,9 +26,11 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int productId;
-	
+	@NotNull (message = "Product Name is Mandatory!")
 	private String productName;
+	@NotNull (message = "Price is Mandatory!")
 	private double price;
+	@NotNull (message = "Color is Mandatory!")
 	private String color;
 	private String dimension;
 	private String specification;

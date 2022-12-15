@@ -30,12 +30,12 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer cartId;
 	
-//	@NotNull(message = "Customer details cannot be left blank")
+
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	
-//	@NotNull(message = "Please select atleast one product")
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
 	private List<Product> products;
 	
