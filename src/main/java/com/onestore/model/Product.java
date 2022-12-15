@@ -31,13 +31,14 @@ public class Product {
 	//@NotNull (message = "Price is Mandatory!")
 	private double price;
 	
-//	@NotNull (message = "Color is Mandatory!")
-//	private String color;
-//	private String dimension;
-//	private String specification;
-//	private String manufacturer;
+	@NotNull (message = "Color is Mandatory!")
+	private String color;
+	private String dimension;
+	private String specification;
+	private String manufacturer;
 	private int quantity;
-//	private String url;
+	private String url;
+	private String category;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
