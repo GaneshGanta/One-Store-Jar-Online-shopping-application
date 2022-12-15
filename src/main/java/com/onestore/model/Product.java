@@ -26,17 +26,18 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int productId;
-	@NotNull (message = "Product Name is Mandatory!")
+	//@NotNull (message = "Product Name is Mandatory!")
 	private String productName;
-	@NotNull (message = "Price is Mandatory!")
+	//@NotNull (message = "Price is Mandatory!")
 	private double price;
-	@NotNull (message = "Color is Mandatory!")
-	private String color;
-	private String dimension;
-	private String specification;
-	private String manufacturer;
+	
+//	@NotNull (message = "Color is Mandatory!")
+//	private String color;
+//	private String dimension;
+//	private String specification;
+//	private String manufacturer;
 	private int quantity;
-	private String url;
+//	private String url;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -46,6 +47,6 @@ public class Product {
 	@JsonIgnore
 	private List<Order> order;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Category category;	
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	private Category category;	
 }

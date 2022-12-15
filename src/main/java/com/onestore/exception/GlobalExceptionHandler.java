@@ -12,6 +12,19 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(ProductException.class)
+	public ResponseEntity<MyErrorDetails> productExceptionHandler(ProductException e, WebRequest req) {
+		MyErrorDetails err = new MyErrorDetails();
+		
+		err.setTimeStamp(LocalDateTime.now());
+		err.setMessage(e.getMessage());
+		err.setDescription(req.getDescription(false));
+		
+		return new ResponseEntity<MyErrorDetails>(err, HttpStatus.BAD_REQUEST);
+	}
+	
+	
 	@ExceptionHandler(CustomerException.class)
 	public ResponseEntity<MyErrorDetails> myEhandler(CustomerException e, WebRequest req) {
 		MyErrorDetails err = new MyErrorDetails();
@@ -40,13 +53,15 @@ public class GlobalExceptionHandler {
 		
 		err.setTimeStamp(LocalDateTime.now());
 		err.setMessage(e.getMessage());
-		err.setDescription(req.getDescription(false));
+		err.setDescription(e.getBindingResult().getFieldError().getDefaultMessage());
 		
 		return new ResponseEntity<MyErrorDetails>(err, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<MyErrorDetails> myEhandler(Exception e, WebRequest req) {
+	
+	
+	@ExceptionHandler(NoHandlerFoundException.class)
+	public ResponseEntity<MyErrorDetails> myEhandler(NoHandlerFoundException e, WebRequest req) {
 		MyErrorDetails err = new MyErrorDetails();
 		
 		err.setTimeStamp(LocalDateTime.now());
@@ -56,8 +71,9 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<MyErrorDetails>(err, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(NoHandlerFoundException.class)
-	public ResponseEntity<MyErrorDetails> myEhandler(NoHandlerFoundException e, WebRequest req) {
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<MyErrorDetails> myEhandler(Exception e, WebRequest req) {
 		MyErrorDetails err = new MyErrorDetails();
 		
 		err.setTimeStamp(LocalDateTime.now());

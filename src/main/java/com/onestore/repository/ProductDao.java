@@ -8,5 +8,7 @@ import com.onestore.model.Product;
 
 @Repository
 public interface ProductDao extends JpaRepository<Product, Integer>{
+	
+	
 
 }
