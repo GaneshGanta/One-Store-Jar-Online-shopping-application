@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,8 @@ public class Product {
 	private String manufacturer;
 	private int quantity;
 	private String category;
+	
+	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Order order;
