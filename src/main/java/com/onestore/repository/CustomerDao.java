@@ -7,5 +7,9 @@ import com.onestore.model.Customer;
 
 @Repository
 public interface CustomerDao extends JpaRepository<Customer, Integer>{
+	
+	
+	
+	public Customer findByEmail(String email);
 
 }
