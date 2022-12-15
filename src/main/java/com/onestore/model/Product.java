@@ -36,6 +36,7 @@ public class Product {
 	private String specification;
 	private String manufacturer;
 	private int quantity;
+	private String url;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
