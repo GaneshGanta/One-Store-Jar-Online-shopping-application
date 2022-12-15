@@ -29,23 +29,18 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer orderId;
 	
-//	@NotNull(message = "{date.invalid}")
 	private LocalDate orderDate;
 	
-//	@NotNull(message = "{status.invalid}")
 	private String orderStatus;
 	
-//	@NotNull(message = "{customer.invalid}")
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	
-//	@NotNull(message = "{product.invalid}")
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<Product> productList;
 	
-//	@NotNull(message = "{address.invalid}")
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;

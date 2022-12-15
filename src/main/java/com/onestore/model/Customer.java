@@ -30,13 +30,13 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer customerId;
 	
-	@NotNull(message = "firstName required to fill")
+	@NotNull(message = "First Name field is Mandatory!")
 	private String firstName;
 	
-	@NotNull(message = "lastname required to fill")
+	@NotNull(message = "Last Name field is Mandatory!")
 	private String lastName;
 	
-	@NotNull(message = "mobileNumber required to fill")
+	@NotNull(message = "Mobile Numberfield is Mandatory!")
 	private String mobileNumber;
 	
 	@NotNull(message = "email required to fill")
