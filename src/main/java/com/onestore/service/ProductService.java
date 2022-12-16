@@ -16,7 +16,7 @@ public interface ProductService {
 
 	public Product updateProductService(Product product) throws ProductException;
 
-	//public List<Product> viewProductByCategoryService(String c_name) throws ProductException;
+	public List<Product> viewProductByCategoryService(String c_name) throws ProductException;
 
 	public Product removeProductService(Integer id) throws ProductException;
 	

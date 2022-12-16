@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onestore.exception.ProductException;
@@ -71,13 +72,13 @@ public class ProductController {
 	}
 	
 	
-//	@GetMapping("/product/viewbycategory")
-//	public ResponseEntity<List<Product>> viewProductByCategoryHandler(@RequestParam(value="category") String cname) throws ProductException{
-//		
-//		List<Product> allProducts = productService.viewProductByCategoryService(cname);
-//		
-//		return new ResponseEntity<List<Product>>(allProducts, HttpStatus.FOUND);
-//	}
+	@GetMapping("/product/viewbycategory")
+	public ResponseEntity<List<Product>> viewProductByCategoryHandler(@RequestParam(value="category") String cname) throws ProductException{
+		
+		List<Product> allProducts = productService.viewProductByCategoryService(cname);
+		
+		return new ResponseEntity<List<Product>>(allProducts, HttpStatus.FOUND);
+	}
 	
 	
 	@DeleteMapping("/product/remove/{Id}")
