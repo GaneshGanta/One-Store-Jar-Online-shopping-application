@@ -3,11 +3,13 @@ package com.onestore.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 
 import com.onestore.model.Product;
-
+@Service
 public interface CartServices {
 
     public Product removeproductFromCart(Integer pid,String key ,Integer cid,Integer quantity)  throws CustomerException, LoginException;

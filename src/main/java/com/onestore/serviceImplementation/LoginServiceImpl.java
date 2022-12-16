@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.onestore.exception.LoginException;
 import com.onestore.model.CurrentUserSession;
@@ -14,6 +15,7 @@ import com.onestore.repository.UserSessionDao;
 
 import net.bytebuddy.utility.RandomString;
 
+@Service
 public class LoginServiceImpl implements LoginService{
 	
 	@Autowired
@@ -43,9 +45,10 @@ public class LoginServiceImpl implements LoginService{
 			
 			String key = RandomString.make(6);
 			
-			CurrentUserSession userSession = new CurrentUserSession(existingCust.getCustomerId(),key,LocalDateTime.now());
+			CurrentUserSession userSession = new CurrentUserSession(existingCust.getCustomerId(),key,LocalDateTime.now(),user.getEmail(),user.getPassword(),user.getRole());
 			sessionD.save(userSession);
 			return userSession.toString();
+			
 		}
 		else 
 			throw new LoginException("Please Enter Valid Password");

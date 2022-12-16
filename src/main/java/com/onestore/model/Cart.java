@@ -39,8 +39,8 @@ public class Cart {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
 	private List<Product> products;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private Product product;
+//	@OneToOne(cascade = CascadeType.ALL)
+//	private Product product;
 
 	
 }
