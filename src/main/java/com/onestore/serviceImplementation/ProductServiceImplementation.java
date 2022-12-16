@@ -60,20 +60,20 @@ public class ProductServiceImplementation implements ProductService{
 		throw new ProductException("product not found with the Id: "+product.getProductId());
 	}
 
-//	@Override
-//	public List<Product> viewProductByCategoryService(String c_name) throws ProductException {
-//		
-//		List<Product> products = productDao.findByCategory(c_name);
-//		
-//		if(products.isEmpty()) {
-//			
-//			throw new ProductException("empty list of the products");
-//			
-//		}
-//		
-//		return products;
-//	
-//	}
+	@Override
+	public List<Product> viewProductByCategoryService(String c_name) throws ProductException {
+		
+		List<Product> products = productDao.findByCategory(c_name);
+		
+		if(products.isEmpty()) {
+			
+			throw new ProductException("empty list of the products");
+			
+		}
+		
+		return products;
+	
+	}
 
 	@Override
 	public Product removeProductService(Integer id) throws ProductException {

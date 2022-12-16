@@ -41,6 +41,7 @@ public class Product {
 	private String manufacturer;
 	private int quantity;
 	private String url;
+    private String category;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Cart cart;
@@ -49,8 +50,7 @@ public class Product {
 	@JsonIgnore
 	private List<Order> order;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Category category;
+	
 
 	@Override
 	public String toString() {
