@@ -150,9 +150,16 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Order> viewAllOrderByUserId(Integer userid) {
+	public List<Order> viewAllOrderByUserId(Integer userid) throws CustomerException {
 		Optional<Customer> cust = customerRepo.findById(userid);
-		return cust.get().getOrder();
+		if(cust.isPresent()) {
+			Customer customer = cust.get();
+			List<Order> orderList = customer.getOrder();
+			return orderList;
+		}else {
+			throw new CustomerException("No user found!");
+		}
+		
 	}
 
 	
