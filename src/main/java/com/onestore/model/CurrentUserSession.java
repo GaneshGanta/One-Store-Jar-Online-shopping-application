@@ -16,8 +16,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CurrentUserSession {
+public class CurrentUserSession extends User {
 
+	public CurrentUserSession(Integer customerId, String key, LocalDateTime now, String email, String password,
+			String role) {
+		// TODO Auto-generated constructor stub
+	}
 	@Id
 	@Column(unique = true)
 	private Integer userId;

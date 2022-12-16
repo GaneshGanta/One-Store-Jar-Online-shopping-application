@@ -28,10 +28,11 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer addressId;
-    @NotNull
+    
     @NotNull(message = "Enter Street Number Cannot be Null!")
 	private String streetNo;
-	@NotNull
+    
+	@NotNull(message = "Enter Building name Cannot be Null!")
     private String buildingName;
 	
     @NotNull(message = "City Name Cannot be Null!")
