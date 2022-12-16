@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.onestore.exception.CustomerException;
+import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
 import com.onestore.model.Product;
 import com.onestore.service.ProductService;
@@ -52,21 +54,21 @@ public class ProductController {
 	}
 	
 	
-	@PostMapping("/product/add")
-	public ResponseEntity<Product> addProductHandler(@Valid @RequestBody Product product) throws ProductException {
+	@PostMapping("/product/add/{key}")
+	public ResponseEntity<Product> addProductHandler(@Valid @RequestBody Product product,@PathVariable String key) throws ProductException, LoginException, CustomerException {
 		
 		System.out.println(product);
 		
-		Product addedProduct = productService.addProductService(product);
+		Product addedProduct = productService.addProductService(product,key);
 		
 		return new ResponseEntity<Product>(addedProduct, HttpStatus.ACCEPTED);
 		
 	}
 	
-	@PutMapping("/product/update")
-	public ResponseEntity<Product> updateProductHandler(@RequestBody Product product) throws ProductException{
+	@PutMapping("/product/update/key")
+	public ResponseEntity<Product> updateProductHandler(@RequestBody Product product,@PathVariable String key) throws ProductException, CustomerException{
 		
-		Product updated = productService.updateProductService(product);
+		Product updated = productService.updateProductService(product,key);
 		
 		return new ResponseEntity<Product>(updated, HttpStatus.OK);
 	}
@@ -81,10 +83,10 @@ public class ProductController {
 	}
 	
 	
-	@DeleteMapping("/product/remove/{Id}")
-	public ResponseEntity<Product> removeProductHandler(@PathVariable Integer Id) throws ProductException {
+	@DeleteMapping("/product/remove/{Id}/{key}")
+	public ResponseEntity<Product> removeProductHandler(@PathVariable Integer Id,@PathVariable String key) throws ProductException, CustomerException {
 		
-		Product product = productService.removeProductService(Id);
+		Product product = productService.removeProductService(Id,key);
 		
 		return new ResponseEntity<Product>(product, HttpStatus.OK);
 		
