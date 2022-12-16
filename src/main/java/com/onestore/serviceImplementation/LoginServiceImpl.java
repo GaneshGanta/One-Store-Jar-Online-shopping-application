@@ -45,7 +45,7 @@ public class LoginServiceImpl implements LoginService{
 			
 			String key = RandomString.make(6);
 			
-			CurrentUserSession userSession = new CurrentUserSession(existingCust.getCustomerId(),key,LocalDateTime.now());
+			CurrentUserSession userSession = new CurrentUserSession(existingCust.getCustomerId(),key,LocalDateTime.now(),user.getEmail(),user.getPassword(),user.getRole());
 			sessionD.save(userSession);
 			return userSession.toString();
 			
