@@ -40,5 +40,18 @@ public class Validation {
 //		login part ended ----------------------------------------------------------------------------------------------------------------------------------------------------
 		
 	}
+	
+	
+	public Customer validateLogin(String key) throws LoginException,CustomerException{
+		
+		CurrentUserSession checkCustomer = currentuser.findByUuid(key);
+		
+		if(checkCustomer == null) throw new LoginException("Customer not logged in");
+		
+		Customer loggedCustomer  = custDao.findById(checkCustomer.getUserId()).orElseThrow(()-> new CustomerException("No Such Customer in Db"));
+		
+		return loggedCustomer;
+		
+	}
 
 }
