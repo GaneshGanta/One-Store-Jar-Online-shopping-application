@@ -8,6 +8,7 @@ import com.onestore.exception.LoginException;
 
 import com.onestore.model.Product;
 
+
 public interface CartServices {
 
     public Product removeproductFromCart(Integer pid,String key ,Integer cid,Integer quantity)  throws CustomerException, LoginException;
