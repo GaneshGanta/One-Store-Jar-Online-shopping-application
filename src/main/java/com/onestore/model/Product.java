@@ -38,7 +38,7 @@ public class Product {
 	private String manufacturer;
 	private int quantity;
 	private String url;
-	private String category;
+	//private String category;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -48,6 +48,6 @@ public class Product {
 	@JsonIgnore
 	private List<Order> order;
 	
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	private Category category;	
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Category category;	
 }
