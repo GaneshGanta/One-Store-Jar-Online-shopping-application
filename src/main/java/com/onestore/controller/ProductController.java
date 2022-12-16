@@ -33,7 +33,7 @@ public class ProductController {
 	
 	
 	
-	@GetMapping("/onestorejar/product/viewall")
+	@GetMapping("/product/viewall")
 	public ResponseEntity<List<Product>> viewAllProductsHandler() throws ProductException{
 		
 		return new ResponseEntity<List<Product>>(productService.viewAllProductsService(), HttpStatus.CREATED);
@@ -41,7 +41,7 @@ public class ProductController {
 	}
 	 
 	
-	@GetMapping("/onestorejar/product/viewproduct/{Id}")
+	@GetMapping("/product/viewproduct/{Id}")
 	public ResponseEntity<Product> viewProductHandler(@PathVariable Integer Id) throws ProductException{
 		
 		Product product = productService.viewProductByIdSerivce(Id);
@@ -51,7 +51,7 @@ public class ProductController {
 	}
 	
 	
-	@PostMapping("/onestorejar/product/add")
+	@PostMapping("/product/add")
 	public ResponseEntity<Product> addProductHandler(@Valid @RequestBody Product product) throws ProductException {
 		
 		System.out.println(product);
@@ -62,7 +62,7 @@ public class ProductController {
 		
 	}
 	
-	@PutMapping("/onestorejar/product/update")
+	@PutMapping("/product/update")
 	public ResponseEntity<Product> updateProductHandler(@RequestBody Product product) throws ProductException{
 		
 		Product updated = productService.updateProductService(product);
@@ -71,7 +71,7 @@ public class ProductController {
 	}
 	
 	
-//	@GetMapping("/onestorejar/product/viewbycategory")
+//	@GetMapping("/product/viewbycategory")
 //	public ResponseEntity<List<Product>> viewProductByCategoryHandler(@RequestParam(value="category") String cname) throws ProductException{
 //		
 //		List<Product> allProducts = productService.viewProductByCategoryService(cname);
@@ -80,7 +80,7 @@ public class ProductController {
 //	}
 	
 	
-	@DeleteMapping("/onestorejar/product/remove/{Id}")
+	@DeleteMapping("/product/remove/{Id}")
 	public ResponseEntity<Product> removeProductHandler(@PathVariable Integer Id) throws ProductException {
 		
 		Product product = productService.removeProductService(Id);

@@ -15,10 +15,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
@@ -39,13 +43,19 @@ public class Product {
 	private String url;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JsonIgnore
 	private Cart cart;
-	
-	@ManyToMany(cascade = CascadeType.ALL)
+	//mapped by should be in product entity not in order
+	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "productList")
 	@JsonIgnore
 	private List<Order> order;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	private Category category;	
+	private Category category;
+
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", productName=" + productName + ", price=" + price + ", color="
+				+ color + ", dimension=" + dimension + ", specification=" + specification + ", manufacturer="
+				+ manufacturer + ", quantity=" + quantity + ", url=" + url + "]";
+	}	
 }
