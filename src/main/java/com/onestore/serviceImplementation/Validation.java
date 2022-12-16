@@ -19,28 +19,6 @@ public class Validation {
 	@Autowired
 	private CustomerDao custDao;
 	
-	public void loginValidation(Integer cid,String key) throws CustomerException {
-		   
-		                  Optional<Customer> opt=custDao.findById(cid);
-	
-//login part started ----------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		if(opt.isEmpty()) throw new CustomerException("Customer not found with id :"+cid);
-		
-		CurrentUserSession RunningSession =	currentuser.findByUuid(key);
-		
-		if(RunningSession ==null)
-		{
-			throw new LoginException("Please provide your valid Unique Login key ?");
-		}
-		if(RunningSession.getUserId()!=opt.get().getCustomerId())
-		{
-			throw new LoginException("please do Login first......");
-		}
-//		login part ended ----------------------------------------------------------------------------------------------------------------------------------------------------
-		
-	}
-	
 	
 	public Customer validateLogin(String key) throws LoginException,CustomerException{
 		

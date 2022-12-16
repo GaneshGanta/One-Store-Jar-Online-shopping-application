@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
+import com.onestore.exception.ProductException;
 import com.onestore.model.Cart;
 import com.onestore.model.CurrentUserSession;
 import com.onestore.model.Customer;
 import com.onestore.model.Product;
+import com.onestore.repository.CartDao;
 import com.onestore.repository.CustomerDao;
 import com.onestore.repository.ProductDao;
 import com.onestore.repository.UserSessionDao;
@@ -27,36 +29,26 @@ public class CartServicesImpl implements CartServices{
 	private ProductDao productDao;
 	
 	@Autowired
+	private CartDao cartD;
+	
+	@Autowired
 	private UserSessionDao currentuser;
 	
 	@Autowired
 	private CustomerDao custDao;
 	
+	@Autowired
+	private Validation valid;
+	
 	@Override
-	public Product removeproductFromCart(Integer pid, String key, Integer cid,Integer quantity) throws CustomerException, LoginException{
+	public Product removeproductFromCart(Integer pid, String key,Integer quantity) throws CustomerException, LoginException{
 		  
-		Optional<Customer> opt = custDao.findById(cid);
+		Customer customer = valid.validateLogin(key);
 		
-//		login part started ----------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		if(opt.isEmpty()) throw new CustomerException("Customer not found with id :"+cid);
-		
-		CurrentUserSession RunningSession =	currentuser.findByUuid(key);
-		
-		if(RunningSession ==null)
+
+		if(customer==null)
 		{
-			throw new LoginException("Please provide your valid Unique Login key ?");
-		}
-		if(RunningSession.getUserId()!=opt.get().getCustomerId())
-		{
-			throw new LoginException("please do Login first......");
-		}
-//		login part ended ----------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		
-		if(opt.isPresent())
-		{
-			Customer customer =opt.get();
+			
 			
 			Cart customer_cart =customer.getCart();
 			
@@ -103,7 +95,7 @@ public class CartServicesImpl implements CartServices{
 		}
 		
 		
-		throw new CustomerException("Invalid customerId:"+cid);
+		throw new CustomerException("Invalid customerId:"+customer.getCustomerId());
 	}
 	
 	
@@ -113,32 +105,13 @@ public class CartServicesImpl implements CartServices{
 	
 
 	@Override
-	public Product updateProductQuantity(Integer cid, Integer pid, Integer quantity, String key) throws CustomerException,LoginException {
+	public Product updateProductQuantity(Integer pid, Integer quantity, String key) throws CustomerException,LoginException {
 		
-	  Optional<Customer> opt =	custDao.findById(cid);
+		Customer customer = valid.validateLogin(key);
 	  
-	  if(opt.isEmpty()) throw new CustomerException("Customer not found with id:"+cid);
-//		login part started ----------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		if(opt.isEmpty()) throw new CustomerException("Customer not found with id :"+cid);
-		
-		CurrentUserSession RunningSession =	currentuser.findByUuid(key);
-		
-		if(RunningSession ==null)
-		{
-			throw new LoginException("Please provide your valid Unique Login key ?");
-		}
-		if(RunningSession.getUserId()!=opt.get().getCustomerId())
-		{
-			throw new LoginException("please do Login first......");
-		}
-//		login part ended ----------------------------------------------------------------------------------------------------------------------------------------------------
-		
-		if(opt.isPresent())
-		{
-		  Customer	cust=opt.get();
+	 
 		  
-		  Cart cust_cart =cust.getCart();
+		  Cart cust_cart =customer.getCart();
 		  
 		 List<Product> productList =cust_cart.getProducts();
 		 
@@ -161,87 +134,44 @@ public class CartServicesImpl implements CartServices{
 		 if(flag==false)throw new CustomerException("Product not found with productId: "+pid);
 		 
 		 cust_cart.setProducts(productList);
-		 cust.setCart(cust_cart);
-		 custDao.save(cust);
+		 customer.setCart(cust_cart);
+		 custDao.save(customer);
 		  
 		 return product ;
 		  
 		}
-	  
-		throw new CustomerException("Customer not found with customerId:"+cid);
-	}
+	
 
 	@Override
-	public String addProductToCart(Integer pid, Integer cid, String key) throws CustomerException, LoginException {
+	public Cart addProductToCart(Integer pid,  String key) throws CustomerException, LoginException, ProductException {
 		    
-		Optional<Product>prodopt =productDao.findById(pid);
+		Optional<Product> prodopt =productDao.findById(pid);
 		
-		  Optional<Customer> custopt =custDao.findById(cid);
-		  
-		 
-		  
-//			login part started ----------------------------------------------------------------------------------------------------------------------------------------------------
-			
-			
-		  if(custopt.isEmpty()) throw new CustomerException("Customer not found with id :"+cid);
-			
-			
-			
-			CurrentUserSession RunningSession =	currentuser.findByUuid(key);
-			
-			if(RunningSession ==null)
-			{
-				throw new LoginException("Please provide your valid Unique Login key ?");
-			}
-			if(RunningSession.getUserId()!=custopt.get().getCustomerId())
-			{
-				throw new LoginException("please do Login first......");
-			}
-//			login part ended ----------------------------------------------------------------------------------------------------------------------------------------------------
-			
-		  Product product =prodopt.get();
-		  
-		  Customer customer =custopt.get();
+		Customer customer = valid.validateLogin(key);
+		if(prodopt.isEmpty()) {
+			throw new ProductException("Product Not Available!");
+		}
+		Product product =prodopt.get();
 		  
 		Cart cust_cart =  customer.getCart();
-		cust_cart.setProduct(product);
-		customer.setCart(cust_cart);
-		custDao.save(customer);
-		  
+		System.out.println(cust_cart+" "+cust_cart.getProducts().size());
+		cust_cart.getProducts().add(product);
+		Cart updatedCart = cartD.save(cust_cart);
+		System.out.println(updatedCart.getProducts().size());
+		customer.setCart(updatedCart);
 		
-		return product.toString()+"This product were added into your cart...";
+		return updatedCart;
 	}
 
 
-
-
-
-
-
 	@Override
-	public List<Product> viewAllProductsFromCart(Integer cid, String key) throws CustomerException, LoginException {
-		  Optional<Customer>custopt =  custDao.findById(cid);
+	public List<Product> viewAllProductsFromCart(String key) throws CustomerException, LoginException {
+		Customer customer = valid.validateLogin(key);
 		  
-//			login part started ----------------------------------------------------------------------------------------------------------------------------------------------------
-			
-		  if(custopt.isEmpty()) throw new CustomerException("Customer not found with id :"+cid);
-			
-			CurrentUserSession RunningSession =	currentuser.findByUuid(key);
-			
-			if(RunningSession ==null)
-			{
-				throw new LoginException("Please provide your valid Unique Login key ?");
-			}
-			if(RunningSession.getUserId()!=custopt.get().getCustomerId())
-			{
-				throw new LoginException("please do Login first......");
-			}
-//			login part ended ----------------------------------------------------------------------------------------------------------------------------------------------------
 	
 			Cart cart=null;
-			if(custopt.isPresent())
+			if(customer==null)
 			{
-			    Customer customer =	custopt.get();
 			    cart  =customer.getCart();
 		
 			}

@@ -7,18 +7,21 @@ import org.springframework.stereotype.Service;
 
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
-
+import com.onestore.exception.ProductException;
+import com.onestore.model.Cart;
 import com.onestore.model.Product;
+
+
 @Service
 public interface CartServices {
 
-    public Product removeproductFromCart(Integer pid,String key ,Integer cid,Integer quantity)  throws CustomerException, LoginException;
+    public Product removeproductFromCart(Integer pid,String key ,Integer quantity)  throws CustomerException, LoginException;
 	
-	public Product updateProductQuantity(Integer cid, Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
+	public Product updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
 	
-	public String addProductToCart(Integer pid, Integer custId, String key) throws CustomerException,LoginException;
+	public Cart addProductToCart(Integer pid,  String key) throws CustomerException, LoginException, ProductException;
 	
-	public List<Product> viewAllProductsFromCart (Integer custId, String key)throws CustomerException,LoginException;
+	public List<Product> viewAllProductsFromCart ( String key)throws CustomerException,LoginException;
 	
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.model.Order;
@@ -27,7 +28,7 @@ public class OrderController {
 	OrderService orderService;
 	
 	@PostMapping("/order/{key}")
-	public ResponseEntity<Order> addOrder(@RequestBody Order order,@PathVariable("key") String key) throws LoginException, CustomerException{
+	public ResponseEntity<Order> addOrder(@RequestBody Order order,@PathVariable("key") String key) throws LoginException, CustomerException, CartException{
 		
 		Order new_order = orderService.addOrder(order, key);
 		return new ResponseEntity<Order>(new_order,HttpStatus.CREATED);
