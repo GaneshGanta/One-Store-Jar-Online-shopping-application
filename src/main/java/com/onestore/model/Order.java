@@ -17,10 +17,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
@@ -38,11 +43,16 @@ public class Order {
 	private Customer customer;
 	
 	@JsonIgnore
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "order")
+	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Product> productList;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;
+
+	@Override
+	public String toString() {
+		return "Order [orderId=" + orderId + ", orderDate=" + orderDate + ", orderStatus=" + orderStatus + "]";
+	}
 	
 }

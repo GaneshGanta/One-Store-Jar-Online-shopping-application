@@ -16,11 +16,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "Address")
-@Data
+@Setter
+@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address {
@@ -54,4 +59,12 @@ public class Address {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL,mappedBy="address")
 	private List<Order> order;
+
+	@Override
+	public String toString() {
+		return "Address [addressId=" + addressId + ", streetNo=" + streetNo + ", buildingName=" + buildingName
+				+ ", city=" + city + ", state=" + state + ", country=" + country + ", pincode=" + pincode + "]";
+	}
+	
+	
 }

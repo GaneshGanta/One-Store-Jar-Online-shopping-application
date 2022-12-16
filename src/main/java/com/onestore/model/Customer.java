@@ -17,11 +17,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
 @Entity
-@Data
+@Setter
+@Getter
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
@@ -56,6 +61,12 @@ public class Customer {
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
+
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", mobileNumber=" + mobileNumber + ", email=" + email + ", password=" + password + "]";
+	}
 	
 	
 	

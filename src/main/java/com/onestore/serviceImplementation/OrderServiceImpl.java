@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.OrderException;
+import com.onestore.model.Cart;
 import com.onestore.model.Customer;
 import com.onestore.model.Order;
 import com.onestore.model.Product;
@@ -30,13 +33,18 @@ public class OrderServiceImpl implements OrderService{
 	
 
 	@Override
-	public Order addOrder(Order order, String key) throws LoginException, CustomerException {
+	public Order addOrder(Order order, String key) throws LoginException, CustomerException, CartException {
 		
 		//validating customer and getting the customer object
 		Customer customer = valid.validateLogin(key);
 		
 		//getting product list from cart and add it to order product list and empty cart
-		List<Product> productList = customer.getCart().getProducts();
+		Cart custCart = customer.getCart();
+		
+		
+		List<Product> productList = custCart.getProducts();
+		
+		
 		if(productList.isEmpty()) {
 			throw new OrderException("Your Cart is Empty! Please Add Products to your cart before Ordering");
 		}else {
@@ -44,7 +52,7 @@ public class OrderServiceImpl implements OrderService{
 			order.setAddress(customer.getAddress());
 			customer.getCart().setProducts(new ArrayList<>());
 		}
-		
+		System.out.println(productList+" Workign Until This");
 		Order new_order = orderRepo.save(order);
 		customer = customerRepo.save(customer);
 		if(customer==null) {
