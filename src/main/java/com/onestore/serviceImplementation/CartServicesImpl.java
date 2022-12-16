@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
@@ -17,6 +18,7 @@ import com.onestore.repository.ProductDao;
 import com.onestore.repository.UserSessionDao;
 import com.onestore.service.CartServices;
 
+@Service
 public class CartServicesImpl implements CartServices{
 
 	@Autowired
