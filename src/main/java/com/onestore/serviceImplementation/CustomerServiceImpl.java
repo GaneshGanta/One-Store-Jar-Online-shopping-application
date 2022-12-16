@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.onestore.exception.CustomerException;
 import com.onestore.model.Address;
+import com.onestore.model.Cart;
 import com.onestore.model.CurrentUserSession;
 import com.onestore.model.Customer;
 import com.onestore.repository.AddressDao;
+import com.onestore.repository.CartDao;
 import com.onestore.repository.UserSessionDao;
 import com.onestore.service.CustomerService;
 import com.onestore.repository.CustomerDao;
@@ -28,17 +30,30 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private UserSessionDao sessionD;
 	
+	@Autowired
+	private CartDao cartD;
+	
 	
 	@Override
 	public Customer addCustomer(Customer cust) throws CustomerException {
+		System.out.println(cust);
+		Customer existCustomer = customerD.findByEmail(cust.getEmail());
 		
-		Optional<Customer> optional = customerD.findById(cust.getCustomerId());
-		
-		if(optional.isPresent()) {
+		if(existCustomer!=null) {
 			throw new CustomerException("Customer already exists");
 		}
 		
-		return customerD.save(cust);
+		//saving the customer to database
+		Customer new_cust = customerD.save(cust);
+		//creating new cart object
+		Cart obj = new Cart();
+		obj.setCustomer(new_cust);
+		//saving the cart
+		Cart new_cart = cartD.save(obj);
+		//linking the cart with customer
+		new_cust.setCart(new_cart);
+		
+		return customerD.save(new_cust);
 		
 	}
 	
