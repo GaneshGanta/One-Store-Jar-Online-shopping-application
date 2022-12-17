@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -42,9 +44,9 @@ public class Product {
 	private int quantity;
 	private String url;
     private String category;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Cart cart;
+//    @JoinTable(name = "product_cart", joinColumns = @JoinColumn(name = "productId"), inverseJoinColumns = @JoinColumn(name = "cartId"))
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	private Cart cart;
 	//mapped by should be in product entity not in order
 	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "productList")
 	@JsonIgnore
