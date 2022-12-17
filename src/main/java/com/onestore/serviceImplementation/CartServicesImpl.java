@@ -3,6 +3,7 @@ package com.onestore.serviceImplementation;
 import java.lang.StackWalker.Option;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import com.onestore.model.Cart;
 import com.onestore.model.CurrentUserSession;
 import com.onestore.model.Customer;
 import com.onestore.model.Product;
+import com.onestore.model.ProductDto;
 import com.onestore.repository.CartDao;
 import com.onestore.repository.CustomerDao;
 import com.onestore.repository.ProductDao;
+import com.onestore.repository.ProductDtoDao;
 import com.onestore.repository.UserSessionDao;
 import com.onestore.service.CartServices;
 
@@ -26,7 +29,7 @@ import com.onestore.service.CartServices;
 public class CartServicesImpl implements CartServices{
 
 	@Autowired
-	private ProductDao productDao;
+	private ProductDtoDao productDao;
 	
 	@Autowired
 	private CartDao cartD;
@@ -41,7 +44,7 @@ public class CartServicesImpl implements CartServices{
 	private Validation valid;
 	
 	@Override
-	public Product removeproductFromCart(Integer pid, String key,Integer quantity) throws CustomerException, LoginException{
+	public ProductDto removeproductFromCart(Integer pid, String key,Integer quantity) throws CustomerException, LoginException{
 		  
 		Customer customer = valid.validateLogin(key);
 		
@@ -52,7 +55,8 @@ public class CartServicesImpl implements CartServices{
 			
 			Cart customer_cart =customer.getCart();
 			
-			List<Product>  productList =  customer_cart.getProducts();
+			List<ProductDto> productList=  customer_cart.getProducts();
+			
 			
 			
 			boolean flag = false;
@@ -67,15 +71,15 @@ public class CartServicesImpl implements CartServices{
 					
 				}
 			}
-			
+		
 //		Here customer productlist get updated with new product....
 			customer_cart.setProducts(productList);
 			
 			
-			Optional<Product> optp = productDao.findById(pid);
+			Optional<ProductDto> optp = productDao.findById(pid);
 			if(optp.isPresent())
 			{
-				Product product =optp.get();
+				ProductDto product =optp.get();
 				if(quantity<1)
 				{
 					throw new CustomerException("Please provide valid quantity");
@@ -105,7 +109,7 @@ public class CartServicesImpl implements CartServices{
 	
 
 	@Override
-	public Product updateProductQuantity(Integer pid, Integer quantity, String key) throws CustomerException,LoginException {
+	public ProductDto updateProductQuantity(Integer pid, Integer quantity, String key) throws CustomerException,LoginException {
 		
 		Customer customer = valid.validateLogin(key);
 	  
@@ -113,11 +117,11 @@ public class CartServicesImpl implements CartServices{
 		  
 		  Cart cust_cart =customer.getCart();
 		  
-		 List<Product> productList =cust_cart.getProducts();
+		 List<ProductDto> productList =cust_cart.getProducts();
 		 
 		 boolean flag=false;
 		 
-		 Product product =null;
+		 ProductDto product =null;
 		 
 		 for(int i=0;i<productList.size();i++)
 		 {
@@ -145,13 +149,13 @@ public class CartServicesImpl implements CartServices{
 	@Override
 	public Cart addProductToCart(Integer pid,  String key) throws CustomerException, LoginException, ProductException {
 		    
-		Optional<Product> prodopt =productDao.findById(pid);
+		Optional<ProductDto> prodopt =productDao.findById(pid);
 		
 		Customer customer = valid.validateLogin(key);
 		if(prodopt.isEmpty()) {
 			throw new ProductException("Product Not Available!");
 		}
-		Product product =prodopt.get();
+		ProductDto product =prodopt.get();
 		  
 		Cart cust_cart =  customer.getCart();
 		System.out.println(cust_cart+" "+cust_cart.getProducts().size());
@@ -165,7 +169,7 @@ public class CartServicesImpl implements CartServices{
 
 
 	@Override
-	public List<Product> viewAllProductsFromCart(String key) throws CustomerException, LoginException {
+	public List<ProductDto> viewAllProductsFromCart(String key) throws CustomerException, LoginException {
 		Customer customer = valid.validateLogin(key);
 		  
 	

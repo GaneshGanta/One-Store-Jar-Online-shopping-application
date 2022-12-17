@@ -7,6 +7,7 @@ import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
 import com.onestore.model.Product;
+import com.onestore.model.ProductDto;
 
 public interface ProductService {
 	

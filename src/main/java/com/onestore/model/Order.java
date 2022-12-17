@@ -44,7 +44,7 @@ public class Order {
 	
 	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.ALL)
-	private List<Product> productList;
+	private List<ProductDto> productList;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL)

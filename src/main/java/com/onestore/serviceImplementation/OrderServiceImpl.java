@@ -3,6 +3,7 @@ package com.onestore.serviceImplementation;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -13,10 +14,13 @@ import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.OrderException;
+import com.onestore.model.Address;
 import com.onestore.model.Cart;
 import com.onestore.model.Customer;
 import com.onestore.model.Order;
 import com.onestore.model.Product;
+import com.onestore.model.ProductDto;
+import com.onestore.repository.AddressDao;
 import com.onestore.repository.CustomerDao;
 import com.onestore.repository.OrderDao;
 import com.onestore.service.OrderService;
@@ -24,6 +28,7 @@ import com.onestore.service.OrderService;
 public class OrderServiceImpl implements OrderService{
 	@Autowired	
 	OrderDao orderRepo;
+	
 	
 	@Autowired
 	CustomerDao customerRepo;
@@ -33,16 +38,17 @@ public class OrderServiceImpl implements OrderService{
 	
 
 	@Override
-	public Order addOrder(Order order, String key) throws LoginException, CustomerException, CartException {
+	public Order addOrder(Order order, Integer addressId, String key) throws LoginException, CustomerException, CartException {
 		
 		//validating customer and getting the customer object
 		Customer customer = valid.validateLogin(key);
+		
 		
 		//getting product list from cart and add it to order product list and empty cart
 		Cart custCart = customer.getCart();
 		
 		
-		List<Product> productList = custCart.getProducts();
+List<ProductDto> productList = custCart.getProducts();
 		
 		
 		if(productList.isEmpty()) {
@@ -54,8 +60,7 @@ public class OrderServiceImpl implements OrderService{
 		}
 		System.out.println(productList+" Workign Until This");
 		Order new_order = orderRepo.save(order);
-		customer = customerRepo.save(customer);
-		if(customer==null) {
+		customer = customerRepo.save(customer);		if(customer==null) {
 			throw new CustomerException("Order: Error while emptying the cart!");
 		}
 		
