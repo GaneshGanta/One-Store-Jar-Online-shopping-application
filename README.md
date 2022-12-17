@@ -41,6 +41,10 @@ Problem Statement:
 - Customer can register themselves and login. Add product to the cart and purchase it .
 - This application will help Admin to search Product list ,add new products ,remove products and update product .
 
+<h1>Entity Relationship Diagram</h1>
+
+<p align="center"><img  src="https://user-images.githubusercontent.com/105967008/208249871-40b0eb72-3733-49ed-9a37-036bc45cc78f.jpeg"></p>
+
 
 <h1>Modules</h1>
 <ul>
@@ -51,3 +55,5 @@ Problem Statement:
   <li><h3>Cart Module</h3></li>
 </ul>
 
+
+ 
