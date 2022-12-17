@@ -16,7 +16,7 @@ import com.onestore.model.ProductDto;
 @Service
 public interface CartServices {
 
-    public ProductDto removeproductFromCart(Integer pid,String key ,Integer quantity)  throws CustomerException, LoginException;
+    public ProductDto removeproductFromCart(Integer pDtoid,String key)  throws CustomerException, LoginException;
 	
 	public ProductDto updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
 	

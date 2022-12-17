@@ -21,7 +21,6 @@ public class Validation {
 	
 	
 	public Customer validateLogin(String key) throws LoginException,CustomerException{
-		
 		CurrentUserSession checkCustomer = currentuser.findByUuid(key);
 		
 		if(checkCustomer == null) throw new LoginException("Customer not logged in");
@@ -29,6 +28,13 @@ public class Validation {
 		Customer loggedCustomer  = custDao.findById(checkCustomer.getUserId()).orElseThrow(()-> new CustomerException("No Such Customer in Db"));
 		
 		return loggedCustomer;
+
+		
+		             
+		             
+		             
+		
+		
 		
 	}
 
