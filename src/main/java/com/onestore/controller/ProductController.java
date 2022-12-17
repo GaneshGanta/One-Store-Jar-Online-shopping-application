@@ -65,7 +65,7 @@ public class ProductController {
 		
 	}
 	
-	@PutMapping("/product/update/key")
+	@PutMapping("/product/update/{key}")
 	public ResponseEntity<Product> updateProductHandler(@RequestBody Product product,@PathVariable String key) throws ProductException, CustomerException{
 		
 		Product updated = productService.updateProductService(product,key);

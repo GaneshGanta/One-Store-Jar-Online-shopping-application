@@ -32,6 +32,9 @@ public class CartServicesImpl implements CartServices{
 	private ProductDtoDao productDao;
 	
 	@Autowired
+	private ProductDao productRepo;
+	
+	@Autowired
 	private CartDao cartD;
 	
 	@Autowired
@@ -147,21 +150,45 @@ public class CartServicesImpl implements CartServices{
 	
 
 	@Override
-	public Cart addProductToCart(Integer pid,  String key) throws CustomerException, LoginException, ProductException {
+	public Cart addProductToCart(Integer pid, String key) throws CustomerException, LoginException, ProductException {
 		    
-		Optional<ProductDto> prodopt =productDao.findById(pid);
+		Optional<Product> prodopt =productRepo.findById(pid);
 		
 		Customer customer = valid.validateLogin(key);
 		if(prodopt.isEmpty()) {
 			throw new ProductException("Product Not Available!");
 		}
-		ProductDto product =prodopt.get();
-		  
+		
 		Cart cust_cart =  customer.getCart();
-		System.out.println(cust_cart+" "+cust_cart.getProducts().size());
-		cust_cart.getProducts().add(product);
+		Product product =prodopt.get();
+		ProductDto dto = new ProductDto();
+		
+		
+		List<ProductDto> existProducts = cust_cart.getProducts();
+		boolean flag = false;
+		for(ProductDto ele:existProducts) {
+			if(ele.getProductId()==pid) {
+				ele.setQuantity(ele.getQuantity()+1);
+				flag = true;
+			}
+			
+		}
+		if(!flag) {
+		
+		dto.setColor(product.getColor());
+		dto.setDimension(product.getDimension());
+		dto.setManufacturer(product.getManufacturer());
+		dto.setPrice(product.getPrice());
+		dto.setProductId(product.getProductId());
+		dto.setProductName(product.getProductName());
+		dto.setQuantity(1);
+		cust_cart.getProducts().add(dto);
+		}
+		
+		
+		
 		Cart updatedCart = cartD.save(cust_cart);
-		System.out.println(updatedCart.getProducts().size());
+		
 		customer.setCart(updatedCart);
 		
 		return updatedCart;
