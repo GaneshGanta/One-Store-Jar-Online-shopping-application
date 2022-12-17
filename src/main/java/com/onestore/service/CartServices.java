@@ -23,6 +23,8 @@ public interface CartServices {
 	
 	public List<Product> viewAllProductsFromCart ( String key)throws CustomerException,LoginException;
 	
+	public double cartTotal(String key)throws CustomerException, LoginException, ProductException;
+	
 	}
 
 	
