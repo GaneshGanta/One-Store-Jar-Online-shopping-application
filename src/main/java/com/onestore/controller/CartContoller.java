@@ -1,9 +1,12 @@
 package com.onestore.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,6 +45,29 @@ public class CartContoller {
 		return new ResponseEntity<ProductDto>(p,HttpStatus.ACCEPTED);
 	}
 	
+	//Product updateProductQuantity(Integer pid, Integer quantity, String key)
 	
+	
+	@PutMapping("/update/{pid}/{q}/{key}")
+	public ResponseEntity<Product>updateProductQuantityHandler(@PathVariable("pid")Integer pid,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
+		
+		           Product product =Cservice.updateProductQuantity(pid, quantity, key);
+		
+		return new ResponseEntity<Product>(product,HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("/view/{key}") // public List<Product> viewAllProductsFromCart(String key)
+	public ResponseEntity<List<Product>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException{
+		         List<Product> productlist = Cservice.viewAllProductsFromCart(key);
+		         
+		return new ResponseEntity<List<Product>>(productlist,HttpStatus.OK);
+	}
+	
+	@GetMapping("/total/{key}")
+	
+	public ResponseEntity<Integer> CartContoller(@PathVariable("key") String key) throws LoginException, CustomerException, ProductException{
+		double cartTotal =  Cservice.cartTotal(key);
+		return new  ResponseEntity<Integer>((int) cartTotal,HttpStatus.OK);
+	}
 
 }

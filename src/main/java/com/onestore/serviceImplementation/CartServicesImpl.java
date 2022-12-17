@@ -160,7 +160,7 @@ public class CartServicesImpl implements CartServices{
 		}
 		
 		Cart cust_cart =  customer.getCart();
-		Product product =prodopt.get();
+     Product product =prodopt.get();
 		ProductDto dto = new ProductDto();
 		
 		
@@ -187,6 +187,7 @@ public class CartServicesImpl implements CartServices{
 		
 		
 		
+
 		Cart updatedCart = cartD.save(cust_cart);
 		
 		customer.setCart(updatedCart);
@@ -201,7 +202,7 @@ public class CartServicesImpl implements CartServices{
 		  
 	
 			Cart cart=null;
-			if(customer==null)
+			if(customer!=null)
 			{
 			    cart  =customer.getCart();
 		
@@ -215,6 +216,33 @@ public class CartServicesImpl implements CartServices{
 				 return cart.getProducts();
 			}
 		
+	}
+
+
+	@Override
+	public double cartTotal(String key)throws CustomerException, LoginException, ProductException{
+		
+		Customer customer = valid.validateLogin(key);
+		
+		
+		List<Product>productList =    customer.getCart().getProducts();
+		
+		double price = 0;
+		
+		if(productList.size()==0)
+		{
+			throw new ProductException("No product available inside your cart-->cartId:"+customer.getCart().getCartId());
+		}
+		else
+		{
+			for(Product prod: productList)
+			{
+				 price = price +  prod.getPrice();
+			}
+		}
+		
+		
+		return price;
 	}
 
 }
