@@ -24,8 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerDao customerD;
 	
-	@Autowired
-	private AddressDao addressD;
+	
 	
 	@Autowired
 	private UserSessionDao sessionD;

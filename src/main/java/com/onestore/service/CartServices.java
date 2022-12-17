@@ -10,18 +10,19 @@ import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
 import com.onestore.model.Cart;
 import com.onestore.model.Product;
+import com.onestore.model.ProductDto;
 
 
 @Service
 public interface CartServices {
 
-    public Product removeproductFromCart(Integer pid,String key ,Integer quantity)  throws CustomerException, LoginException;
+    public ProductDto removeproductFromCart(Integer pid,String key ,Integer quantity)  throws CustomerException, LoginException;
 	
-	public Product updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
+	public ProductDto updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
 	
 	public Cart addProductToCart(Integer pid,  String key) throws CustomerException, LoginException, ProductException;
 	
-	public List<Product> viewAllProductsFromCart ( String key)throws CustomerException,LoginException;
+	public List<ProductDto> viewAllProductsFromCart ( String key)throws CustomerException,LoginException;
 	
 	public double cartTotal(String key)throws CustomerException, LoginException, ProductException;
 	

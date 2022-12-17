@@ -2,7 +2,6 @@ package com.onestore.controller;
 
 
 import java.util.List;
-
 import javax.validation.Valid;
 import com.onestore.exception.CustomerException;
 import com.onestore.model.Customer;
@@ -29,6 +28,7 @@ public class CustomerController {
 	
 	@PostMapping("/customers")
 	public ResponseEntity<Customer> addCustomerHandler(@Valid @RequestBody Customer cust) throws CustomerException{
+		System.out.println(cust);
 		
 		Customer saveCustomer = cService.addCustomer(cust);
 		

@@ -19,6 +19,7 @@ import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
 import com.onestore.model.Cart;
 import com.onestore.model.Product;
+import com.onestore.model.ProductDto;
 import com.onestore.service.CartServices;
 
 @RestController
@@ -37,11 +38,11 @@ public class CartContoller {
 	}
 	
 	@PutMapping("/remove/{pid}/{key}/{q}")//removeproductFromCart(Integer pid, String key, Integer cid,Integer quantity)
-	public ResponseEntity<Product>removeProductFromCartHandler(@PathVariable("pid") Integer pid,@PathVariable("key") String key ,@PathVariable("q") Integer quantity) throws LoginException, CustomerException
+	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pid") Integer pid,@PathVariable("key") String key ,@PathVariable("q") Integer quantity) throws LoginException, CustomerException
 	{
-		Product p = Cservice.removeproductFromCart(pid, key,  quantity);
+		ProductDto p = Cservice.removeproductFromCart(pid, key,  quantity);
 		
-		return new ResponseEntity<Product>(p,HttpStatus.ACCEPTED);
+		return new ResponseEntity<ProductDto>(p,HttpStatus.ACCEPTED);
 	}
 	
 	//Product updateProductQuantity(Integer pid, Integer quantity, String key)
