@@ -112,6 +112,8 @@ public class CartServicesImpl implements CartServices{
 	@Override   ///this method is not working only other are working......................
 	public ProductDto removeproductFromCart(Integer  pDtoId, String key) throws CustomerException, LoginException,CartException, ProductException{
 		
+		
+		
 		return null;
 		
 	}
@@ -124,37 +126,71 @@ public class CartServicesImpl implements CartServices{
 
 	@Override
 	public ProductDto updateProductQuantity(Integer pDtoId, Integer quantity, String key) throws CustomerException,LoginException {
-
-				Customer customer = valid.validateLogin(key);
-				if(customer==null)throw new CustomerException("customer not found with uuid:"+key);
-				
-				List<ProductDto> productDtolist =    customer.getCart().getProducts();
-				
-				ProductDto product = null;
-				
-				
+		
+		
+		Customer customer = valid.validateLogin(key);
+		
+		
+			
+			 
+			 Cart cart_cus= customer.getCart();
+			 List<ProductDto> li= cart_cus.getProducts();
+			 
 				boolean flag=false;
 				
-				for(int i=0;i<productDtolist.size();i++)
-				{
-					if(productDtolist.get(i).getId()==pDtoId)
-					{
-						productDtolist.get(i).setQuantity(productDtolist.get(i).getQuantity()+quantity);
-						
-						product =   productDtolist.get(i);
-						flag = true;
-					    break;
-					}
-				}
+				ProductDto p=null;
 				
-				if(flag==false)throw new CustomerException("Product not found with productDtoId: "+pDtoId);
-				
-			     Cart customerCart =	 customer.getCart();
-			      customerCart.setProducts(productDtolist);
-			
-			       customer.setCart(customerCart);
-			       custDao.save(customer);
-			       return product;
+				 for(int i=0;i<li.size();i++){
+					 if(li.get(i).getProductId()==pDtoId) {
+						 li.get(i).setQuantity(li.get(i).getQuantity()+quantity);
+						 p=li.get(i);
+						 flag=true;
+						 break;
+					 }
+				 }
+				 if(!flag) throw new CustomerException("Product Not found");
+				 
+				 cart_cus.setProducts(li);
+				 customer.setCart(cart_cus);
+				 custDao.save(customer);
+		 
+				 return p;
+		 
+		 
+		 
+        
+//				Customer customer = valid.validateLogin(key);
+//				if(customer==null)throw new CustomerException("customer not found with uuid:"+key);
+//				
+//				List<ProductDto> productDtolist = customer.getCart().getProducts();
+//				
+//				
+//				System.out.println(productDtolist+"--------------------");
+//				ProductDto product = null;
+//				
+//				
+//				boolean flag=false;
+//				
+//				for(int i=0;i<productDtolist.size();i++)
+//				{
+//					if(productDtolist.get(i).getId()==pDtoId)
+//					{
+//						productDtolist.get(i).setQuantity(productDtolist.get(i).getQuantity()+quantity);
+//						
+//						product =   productDtolist.get(i);
+//						flag = true;
+//					    break;
+//					}
+//				}
+//				
+//				if(flag==false)throw new CustomerException("Product not found with productDtoId: "+pDtoId);
+//				
+//			     Cart customerCart = customer.getCart();
+//			      customerCart.setProducts(productDtolist);
+//			
+//			       customer.setCart(customerCart);
+//			       custDao.save(customer);
+//			       return product;
 			}
 //			
 			
@@ -163,24 +199,21 @@ public class CartServicesImpl implements CartServices{
 	
 
 	@Override
-	public List<ProductDto> viewAllProductsFromCart(String key) throws CustomerException, LoginException {
+	public List<ProductDto> viewAllProductsFromCart(String key) throws CustomerException, LoginException, ProductException {
 		Customer customer = valid.validateLogin(key);
 		  
 	
-			Cart cart=null;
-			if(customer!=null)
-			{
-			    cart  =customer.getCart();
-		
+			
+			
+			List<ProductDto> products = productDao.findAll();
+			
+			if(products.isEmpty()) {
+				
+				throw new ProductException("empty list of products");
 			}
-			if(cart==null)
-			{
-				throw new CustomerException("Your cart is empty with cardId:"+cart.getCartId());
-			}
-			else
-			{
-				 return cart.getProducts();
-			}
+			
+			return products;
+			
 		
 	}
 
@@ -191,21 +224,28 @@ public class CartServicesImpl implements CartServices{
 		Customer customer = valid.validateLogin(key);
 		
 		
-		 List<ProductDto> productList= customer.getCart().getProducts();
-		
+//		 
+//		
 		double price = 0;
+//		
+//		
 		
-		if(productList.size()==0)
-		{
-			throw new ProductException("No product available inside your cart-->cartId:"+customer.getCart().getCartId());
+		
+		List<ProductDto> products = productDao.findAll();
+		
+		if(products.isEmpty()) {
+			
+			throw new ProductException("empty list of products");
 		}
 		else
 		{
-			for(ProductDto prod: productList)
+			for(int i=0;i<products.size();i++)
 			{
-				 price = price +  prod.getPrice();
+				price = price + products.get(i).getPrice();
 			}
 		}
+		
+		
 		
 		
 		return price;

@@ -51,7 +51,7 @@ public class ProductDto {
 		this.quantity = quantity;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL)
 	private Cart cart;
 	
 

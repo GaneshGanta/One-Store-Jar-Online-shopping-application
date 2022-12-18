@@ -58,7 +58,7 @@ public class CartContoller {
 	}
 	
 	@GetMapping("/view/{key}") 
-	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException{
+	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException,ProductException{
 		         List<ProductDto> productlist = Cservice.viewAllProductsFromCart(key);
 		         
 		return new ResponseEntity<List<ProductDto>>(productlist,HttpStatus.OK);
