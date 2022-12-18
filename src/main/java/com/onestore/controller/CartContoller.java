@@ -38,14 +38,14 @@ public class CartContoller {
 		return new ResponseEntity<Cart>(updatedCart,HttpStatus.ACCEPTED);
 	}
 	
-	@DeleteMapping("/remove/{pDtoId}/{key}")
-	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pDtoId") Integer pDtoId,@PathVariable("key") String key) throws LoginException, CustomerException, CartException,ProductException
-	{
-		ProductDto product = Cservice.removeproductFromCart(pDtoId, key);
-		
-		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
-	}
-	
+//	@DeleteMapping("/remove/{pDtoId}/{key}")
+//	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pDtoId") Integer pDtoId,@PathVariable("key") String key) throws LoginException, CustomerException, CartException,ProductException
+//	{
+//		ProductDto product = Cservice.removeproductFromCart(pDtoId, key);
+//		
+//		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
+//	}
+//	
 	
 	
 	

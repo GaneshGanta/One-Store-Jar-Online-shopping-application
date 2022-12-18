@@ -125,24 +125,12 @@ public class CartServicesImpl implements CartServices{
 	@Override
 	public ProductDto updateProductQuantity(Integer pDtoId, Integer quantity, String key) throws CustomerException,LoginException {
 
-		ProductDto product =null;        
-		CurrentUserSession CurrentUserSession = currentuser.findByUuid(key);
-		
-		if(CurrentUserSession==null)
-		{
-			throw new CustomerException("You must login first");
-		}
-		
-		
-		
-		
-			if(CurrentUserSession.getRole().equalsIgnoreCase("Customer"))
-			{
 				Customer customer = valid.validateLogin(key);
+				if(customer==null)throw new CustomerException("customer not found with uuid:"+key);
 				
 				List<ProductDto> productDtolist =    customer.getCart().getProducts();
 				
-				
+				ProductDto product = null;
 				
 				
 				boolean flag=false;
@@ -161,20 +149,17 @@ public class CartServicesImpl implements CartServices{
 				
 				if(flag==false)throw new CustomerException("Product not found with productDtoId: "+pDtoId);
 				
-			Cart customerCart =	 customer.getCart();
-			customerCart.setProducts(productDtolist);
+			     Cart customerCart =	 customer.getCart();
+			      customerCart.setProducts(productDtolist);
 			
-			customer.setCart(customerCart);
-			custDao.save(customer);
-				
+			       customer.setCart(customerCart);
+			       custDao.save(customer);
+			       return product;
 			}
-			else
-			{
-				throw new CustomerException("You cannot to this task because you are Admin.");
-			}
+//			
 			
-			return product;
-		}
+			
+		
 	
 
 	@Override
