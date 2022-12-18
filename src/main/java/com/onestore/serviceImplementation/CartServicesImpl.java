@@ -2,13 +2,17 @@ package com.onestore.serviceImplementation;
 
 import java.lang.StackWalker.Option;
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
@@ -46,142 +50,51 @@ public class CartServicesImpl implements CartServices{
 	@Autowired
 	private Validation valid;
 	
+	
 	@Override
-	public ProductDto removeproductFromCart(Integer pid, String key,Integer quantity) throws CustomerException, LoginException{
-		  
-		Customer customer = valid.validateLogin(key);
-		
-
-		if(customer==null)
-		{
-			
-			
-			Cart customer_cart =customer.getCart();
-			
-			List<ProductDto> productList=  customer_cart.getProducts();
-			
-			
-			
-			boolean flag = false;
-			
-			for(int i=0;i<productList.size();i++)
-			{
-				if(productList.get(i).getProductId()==pid)
-				{
-					productList.remove(productList.get(i));
-					flag=true;
-					break;
-					
-				}
-			}
-		
-//		Here customer productlist get updated with new product....
-			customer_cart.setProducts(productList);
-			
-			
-			Optional<ProductDto> optp = productDao.findById(pid);
-			if(optp.isPresent())
-			{
-				ProductDto product =optp.get();
-				if(quantity<1)
-				{
-					throw new CustomerException("Please provide valid quantity");
-				}
-				else
-				{
-					  product.setQuantity(product.getQuantity()-quantity);
-					  productDao.save(product);
-				}
-				
-			}
-			else
-			{
-				throw new CustomerException("Invalid product id:"+pid);
-			}
-			
-		}
-		
-		
-		throw new CustomerException("Invalid customerId:"+customer.getCustomerId());
-	}
-	
-	
-	
-	
-	
-	
-
-	@Override
-	public ProductDto updateProductQuantity(Integer pid, Integer quantity, String key) throws CustomerException,LoginException {
-		
-		Customer customer = valid.validateLogin(key);
-	  
-	 
-		  
-		  Cart cust_cart =customer.getCart();
-		  
-		 List<ProductDto> productList =cust_cart.getProducts();
-		 
-		 boolean flag=false;
-		 
-		 ProductDto product =null;
-		 
-		 for(int i=0;i<productList.size();i++)
-		 {
-			 if(productList.get(i).getProductId()==pid)
-			 {
-				 productList.get(i).setQuantity(productList.get(i).getQuantity()+quantity);
-				 
-				 product =productList.get(i);
-				 
-				 flag = true;
-				 break;
-			 }
-		 }
-		 if(flag==false)throw new CustomerException("Product not found with productId: "+pid);
-		 
-		 cust_cart.setProducts(productList);
-		 customer.setCart(cust_cart);
-		 custDao.save(customer);
-		  
-		 return product ;
-		  
-		}
-	
-
-	@Override
-	public Cart addProductToCart(Integer pid, String key) throws CustomerException, LoginException, ProductException {
+	public Cart addProductToCart(Integer pid,Integer quantity, String key) throws CustomerException, LoginException, ProductException {
 		    
 		Optional<Product> prodopt =productRepo.findById(pid);
 		
 		Customer customer = valid.validateLogin(key);
+		
 		if(prodopt.isEmpty()) {
 			throw new ProductException("Product Not Available!");
 		}
 		
 		Cart cust_cart =  customer.getCart();
-     Product product =prodopt.get();
-		ProductDto dto = new ProductDto();
+		
+         Product product =prodopt.get();
+         
+         if(product.getQuantity()<quantity)
+         {
+        	 throw new ProductException("Only "+product.getQuantity()+"is available....");
+         }
+		
 		
 		
 		List<ProductDto> existProducts = cust_cart.getProducts();
+		
 		boolean flag = false;
 		for(ProductDto ele:existProducts) {
 			if(ele.getProductId()==pid) {
-				ele.setQuantity(ele.getQuantity()+1);
+				ele.setQuantity(ele.getQuantity()+quantity);
 				flag = true;
+				break;
 			}
 			
 		}
-		if(!flag) {
 		
+		if(!flag) {
+			ProductDto dto = new ProductDto();
+			
 		dto.setColor(product.getColor());
 		dto.setDimension(product.getDimension());
 		dto.setManufacturer(product.getManufacturer());
 		dto.setPrice(product.getPrice());
 		dto.setProductId(product.getProductId());
 		dto.setProductName(product.getProductName());
-		dto.setQuantity(1);
+		dto.setQuantity(quantity);
 		cust_cart.getProducts().add(dto);
 		}
 		
@@ -195,6 +108,74 @@ public class CartServicesImpl implements CartServices{
 		return updatedCart;
 	}
 
+	
+	@Override   ///this method is not working only other are working......................
+	public ProductDto removeproductFromCart(Integer  pDtoId, String key) throws CustomerException, LoginException,CartException, ProductException{
+		
+		return null;
+		
+	}
+	
+	
+	
+	
+	
+	
+
+	@Override
+	public ProductDto updateProductQuantity(Integer pDtoId, Integer quantity, String key) throws CustomerException,LoginException {
+
+		ProductDto product =null;        
+		CurrentUserSession CurrentUserSession = currentuser.findByUuid(key);
+		
+		if(CurrentUserSession==null)
+		{
+			throw new CustomerException("You must login first");
+		}
+		
+		
+		
+		
+			if(CurrentUserSession.getRole().equalsIgnoreCase("Customer"))
+			{
+				Customer customer = valid.validateLogin(key);
+				
+				List<ProductDto> productDtolist =    customer.getCart().getProducts();
+				
+				
+				
+				
+				boolean flag=false;
+				
+				for(int i=0;i<productDtolist.size();i++)
+				{
+					if(productDtolist.get(i).getId()==pDtoId)
+					{
+						productDtolist.get(i).setQuantity(productDtolist.get(i).getQuantity()+quantity);
+						
+						product =   productDtolist.get(i);
+						flag = true;
+					    break;
+					}
+				}
+				
+				if(flag==false)throw new CustomerException("Product not found with productDtoId: "+pDtoId);
+				
+			Cart customerCart =	 customer.getCart();
+			customerCart.setProducts(productDtolist);
+			
+			customer.setCart(customerCart);
+			custDao.save(customer);
+				
+			}
+			else
+			{
+				throw new CustomerException("You cannot to this task because you are Admin.");
+			}
+			
+			return product;
+		}
+	
 
 	@Override
 	public List<ProductDto> viewAllProductsFromCart(String key) throws CustomerException, LoginException {
@@ -225,7 +206,7 @@ public class CartServicesImpl implements CartServices{
 		Customer customer = valid.validateLogin(key);
 		
 		
-		List<Product>productList =    customer.getCart().getProducts();
+		 List<ProductDto> productList= customer.getCart().getProducts();
 		
 		double price = 0;
 		
@@ -235,7 +216,7 @@ public class CartServicesImpl implements CartServices{
 		}
 		else
 		{
-			for(Product prod: productList)
+			for(ProductDto prod: productList)
 			{
 				 price = price +  prod.getPrice();
 			}

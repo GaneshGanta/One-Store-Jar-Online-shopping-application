@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
@@ -29,38 +30,38 @@ public class CartContoller {
 	@Autowired
 	public CartServices Cservice;
 	
-	@PostMapping("/add/{pid}/{key}")
-	public ResponseEntity<Cart>addProductToCartHandler(@PathVariable("pid") Integer pid,@PathVariable("key") String key ) throws LoginException, CustomerException, ProductException
+	@PostMapping("/add/{pid}/{q}/{key}")
+	public ResponseEntity<Cart>addProductToCartHandler(@PathVariable("pid") Integer pid,@PathVariable("q") Integer quantity,@PathVariable("key") String key ) throws LoginException, CustomerException, ProductException
 	{
-		Cart updatedCart = Cservice.addProductToCart(pid,  key);
+		Cart updatedCart = Cservice.addProductToCart(pid,quantity,  key);
 		
 		return new ResponseEntity<Cart>(updatedCart,HttpStatus.ACCEPTED);
 	}
 	
-	@PutMapping("/remove/{pid}/{key}/{q}")//removeproductFromCart(Integer pid, String key, Integer cid,Integer quantity)
-	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pid") Integer pid,@PathVariable("key") String key ,@PathVariable("q") Integer quantity) throws LoginException, CustomerException
+	@DeleteMapping("/remove/{pDtoId}/{key}")
+	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pDtoId") Integer pDtoId,@PathVariable("key") String key) throws LoginException, CustomerException, CartException,ProductException
 	{
-		ProductDto p = Cservice.removeproductFromCart(pid, key,  quantity);
+		ProductDto product = Cservice.removeproductFromCart(pDtoId, key);
 		
-		return new ResponseEntity<ProductDto>(p,HttpStatus.ACCEPTED);
+		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
 	}
 	
-	//Product updateProductQuantity(Integer pid, Integer quantity, String key)
 	
 	
-	@PutMapping("/update/{pid}/{q}/{key}")
-	public ResponseEntity<Product>updateProductQuantityHandler(@PathVariable("pid")Integer pid,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
+	
+	@PutMapping("/update/{pDtoId}/{q}/{key}")
+	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
 		
-		           Product product =Cservice.updateProductQuantity(pid, quantity, key);
+		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
 		
-		return new ResponseEntity<Product>(product,HttpStatus.ACCEPTED);
+		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/view/{key}") // public List<Product> viewAllProductsFromCart(String key)
-	public ResponseEntity<List<Product>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException{
-		         List<Product> productlist = Cservice.viewAllProductsFromCart(key);
+	@GetMapping("/view/{key}") 
+	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException{
+		         List<ProductDto> productlist = Cservice.viewAllProductsFromCart(key);
 		         
-		return new ResponseEntity<List<Product>>(productlist,HttpStatus.OK);
+		return new ResponseEntity<List<ProductDto>>(productlist,HttpStatus.OK);
 	}
 	
 	@GetMapping("/total/{key}")

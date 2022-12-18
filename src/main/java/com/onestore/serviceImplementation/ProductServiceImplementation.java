@@ -66,7 +66,7 @@ public class ProductServiceImplementation implements ProductService{
 			
 		}
 		
-		if(status.getRole().equals("customer")) {
+		if(status.getRole().equalsIgnoreCase("customer")) {
 			
 			throw new CustomerException("You are not authorized to add products");
 			
@@ -90,7 +90,7 @@ public class ProductServiceImplementation implements ProductService{
 			}
 			
 			
-			if(status.getRole().equals("customer")) {
+			if(status.getRole().equalsIgnoreCase("customer")) {
 				
 				throw new CustomerException("You are not authorized to add products");
 				
@@ -136,7 +136,7 @@ public class ProductServiceImplementation implements ProductService{
 		}
 		
 		
-		if(status.getRole().equals("customer")) {
+		if(status.getRole().equalsIgnoreCase("customer")) {
 			
 			throw new CustomerException("You are not authorized to add products");
 			
