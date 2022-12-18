@@ -109,41 +109,48 @@ public class CartServicesImpl implements CartServices{
 	
 
 	@Override
-	public ProductDto updateProductQuantity(Integer pid, Integer quantity, String key) throws CustomerException,LoginException {
+
+	public ProductDto updateProductQuantity(Integer pDtoId, Integer quantity, String key) throws CustomerException,LoginException {
+
+				Customer customer = valid.validateLogin(key);
+				if(customer==null)throw new CustomerException("customer not found with uuid:"+key);
+				
+				List<ProductDto> productDtolist =    customer.getCart().getProducts();
+				
+				ProductDto product = null;
+				
+				
+				boolean flag=false;
+				
+				for(int i=0;i<productDtolist.size();i++)
+				{
+					if(productDtolist.get(i).getId()==pDtoId)
+					{
+						productDtolist.get(i).setQuantity(productDtolist.get(i).getQuantity()+quantity);
+						
+						product =   productDtolist.get(i);
+						flag = true;
+					    break;
+					}
+				}
+				
+				if(flag==false)throw new CustomerException("Product not found with productDtoId: "+pDtoId);
+				
+			     Cart customerCart =	 customer.getCart();
+			      customerCart.setProducts(productDtolist);
+			
+			       customer.setCart(customerCart);
+			       custDao.save(customer);
+			       return product;
+			}
 		
-		Customer customer = valid.validateLogin(key);
-	  
-	 
-		  
-		  Cart cust_cart =customer.getCart();
-		  
-		 List<ProductDto> productList =cust_cart.getProducts();
+			
+			
+		
+	
+
+	
 		 
-		 boolean flag=false;
-		 
-		 ProductDto product =null;
-		 
-		 for(int i=0;i<productList.size();i++)
-		 {
-			 if(productList.get(i).getProductId()==pid)
-			 {
-				 productList.get(i).setQuantity(productList.get(i).getQuantity()+quantity);
-				 
-				 product =productList.get(i);
-				 
-				 flag = true;
-				 break;
-			 }
-		 }
-		 if(flag==false)throw new CustomerException("Product not found with productId: "+pid);
-		 
-		 cust_cart.setProducts(productList);
-		 customer.setCart(cust_cart);
-		 custDao.save(customer);
-		  
-		 return product ;
-		  
-		}
 	
 
 	@Override
@@ -166,6 +173,7 @@ public class CartServicesImpl implements CartServices{
 		
 		return updatedCart;
 	}
+
 
 
 	@Override
