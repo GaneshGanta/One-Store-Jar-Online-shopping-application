@@ -14,6 +14,7 @@ import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.OrderException;
+import com.onestore.exception.ProductException;
 import com.onestore.model.Address;
 import com.onestore.model.Cart;
 import com.onestore.model.Customer;
@@ -23,12 +24,15 @@ import com.onestore.model.ProductDto;
 import com.onestore.repository.AddressDao;
 import com.onestore.repository.CustomerDao;
 import com.onestore.repository.OrderDao;
+import com.onestore.repository.ProductDao;
 import com.onestore.service.OrderService;
 @Service
 public class OrderServiceImpl implements OrderService{
 	@Autowired	
 	OrderDao orderRepo;
 	
+	@Autowired
+	ProductDao prodRepo;
 	
 	@Autowired
 	CustomerDao customerRepo;
@@ -38,7 +42,7 @@ public class OrderServiceImpl implements OrderService{
 	
 
 	@Override
-	public Order addOrder(Order order, Integer addressId, String key) throws LoginException, CustomerException, CartException {
+	public Order addOrder(Order order, Integer addressId, String key) throws LoginException, CustomerException, CartException, ProductException {
 		
 		//validating customer and getting the customer object
 		Customer customer = valid.validateLogin(key);
@@ -48,23 +52,45 @@ public class OrderServiceImpl implements OrderService{
 		Cart custCart = customer.getCart();
 		
 		
-List<ProductDto> productList = custCart.getProducts();
+		List<ProductDto> productList = custCart.getProducts();
 		
 		
 		if(productList.isEmpty()) {
 			throw new OrderException("Your Cart is Empty! Please Add Products to your cart before Ordering");
 		}else {
 			order.setProductList(productList);
+			
 			order.setAddress(customer.getAddress());
 			customer.getCart().setProducts(new ArrayList<>());
 		}
 		System.out.println(productList+" Workign Until This");
 		Order new_order = orderRepo.save(order);
-		customer = customerRepo.save(customer);		if(customer==null) {
+		customer = customerRepo.save(customer);		
+		if(customer==null) {
 			throw new CustomerException("Order: Error while emptying the cart!");
 		}
 		
 		if(new_order!=null) {
+			
+			for(ProductDto prod:productList) {
+				
+				Integer prodId = prod.getProductId();
+				Optional<Product> eachProduct = prodRepo.findById(prodId);
+				if(eachProduct.isEmpty()) {
+					throw new ProductException("Can't able find Product!");
+				}else {
+					
+					Product product = eachProduct.get();
+					if(product.getQuantity()<prod.getQuantity()) {
+						throw new OrderException("Order quantity of product "+product.getProductId()+" exceeds available quanity("+product.getQuantity()+")");
+					}
+					product.setQuantity(product.getQuantity()-prod.getQuantity());
+					prodRepo.save(product);
+				}
+				
+			}
+			
+			
 			return order;
 		}else {
 			throw new OrderException("Error Creating Order!");
@@ -74,10 +100,28 @@ List<ProductDto> productList = custCart.getProducts();
 	}
 
 	@Override
-	public Order updateOrder(Order orderUpdate, String key) throws LoginException, CustomerException {
-		
+	public Order updateOrder(Order orderUpdate, String key) throws LoginException, CustomerException, ProductException {
+		//just validation
 		Customer customer = valid.validateLogin(key);
 		
+		List<ProductDto> productList = orderUpdate.getProductList();
+		for(ProductDto prod:productList) {
+			
+			Integer prodId = prod.getProductId();
+			Optional<Product> eachProduct = prodRepo.findById(prodId);
+			if(eachProduct.isEmpty()) {
+				throw new ProductException("Can't able find Product!");
+			}else {
+				
+				Product product = eachProduct.get();
+				if(product.getQuantity()<prod.getQuantity()) {
+					throw new OrderException("Order quantity of product "+product.getProductId()+" exceeds available quanity("+product.getQuantity()+")");
+				}
+				product.setQuantity(product.getQuantity()-prod.getQuantity());
+				prodRepo.save(product);
+			}
+			
+		}
 		Optional<Order> existingOrder = orderRepo.findById(orderUpdate.getOrderId());
 		if(existingOrder.isPresent()) {
 			Order order = existingOrder.get();
