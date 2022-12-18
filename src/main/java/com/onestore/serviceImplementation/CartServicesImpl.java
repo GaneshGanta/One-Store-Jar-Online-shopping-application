@@ -2,13 +2,17 @@ package com.onestore.serviceImplementation;
 
 import java.lang.StackWalker.Option;
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
@@ -48,7 +52,7 @@ public class CartServicesImpl implements CartServices{
 	
 	
 	@Override
-	public Cart addProductToCart(Integer pid, String key) throws CustomerException, LoginException, ProductException {
+	public Cart addProductToCart(Integer pid,Integer quantity, String key) throws CustomerException, LoginException, ProductException {
 		    
 		Optional<Product> prodopt =productRepo.findById(pid);
 		
@@ -59,19 +63,28 @@ public class CartServicesImpl implements CartServices{
 		}
 		
 		Cart cust_cart =  customer.getCart();
-     Product product =prodopt.get();
+		
+         Product product =prodopt.get();
+         
+         if(product.getQuantity()<quantity)
+         {
+        	 throw new ProductException("Only "+product.getQuantity()+"is available....");
+         }
 		
 		
 		
 		List<ProductDto> existProducts = cust_cart.getProducts();
+		
 		boolean flag = false;
 		for(ProductDto ele:existProducts) {
 			if(ele.getProductId()==pid) {
-				ele.setQuantity(ele.getQuantity()+1);
+				ele.setQuantity(ele.getQuantity()+quantity);
 				flag = true;
+				break;
 			}
 			
 		}
+		
 		if(!flag) {
 			ProductDto dto = new ProductDto();
 			
@@ -81,7 +94,7 @@ public class CartServicesImpl implements CartServices{
 		dto.setPrice(product.getPrice());
 		dto.setProductId(product.getProductId());
 		dto.setProductName(product.getProductName());
-		dto.setQuantity(product.getQuantity());
+		dto.setQuantity(quantity);
 		cust_cart.getProducts().add(dto);
 		}
 		
@@ -97,41 +110,9 @@ public class CartServicesImpl implements CartServices{
 
 	
 	@Override   ///this method is not working only other are working......................
-	public ProductDto removeproductFromCart(Integer  pDtoId, String key) throws CustomerException, LoginException{
-		  
-		Customer customer = valid.validateLogin(key);
+	public ProductDto removeproductFromCart(Integer  pDtoId, String key) throws CustomerException, LoginException,CartException, ProductException{
 		
-		ProductDto product = null;
-
-		if(customer==null)
-		{
-			throw new CustomerException("Invalid customerId:"+customer.getCustomerId());
-		}
-		
-		
-	     List<ProductDto> list =customer.getCart().getProducts();
-		
-		    boolean flag = false;
-			for(ProductDto el: list)
-			{
-				if(el.getId()==pDtoId)
-				{
-					System.out.println(el.getId()+"------------------------>");
-					product = el;
-					productDao.delete(product);
-					
-				   
-					flag = true;
-				}
-			}
-			
-			if(!flag) {
-				throw new CustomerException("There is no product with id :"+pDtoId);
-			}
-		   	 
-				   
-				   
-		   return product;
+		return null;
 		
 	}
 	

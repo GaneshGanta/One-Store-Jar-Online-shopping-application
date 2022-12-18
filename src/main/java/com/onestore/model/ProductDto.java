@@ -1,8 +1,10 @@
 package com.onestore.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,8 +51,8 @@ public class ProductDto {
 		this.quantity = quantity;
 	}
 
-	
-	
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Cart cart;
 	
 
 

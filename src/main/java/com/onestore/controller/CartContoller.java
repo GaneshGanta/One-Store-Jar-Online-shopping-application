@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
 import com.onestore.exception.ProductException;
@@ -29,16 +30,16 @@ public class CartContoller {
 	@Autowired
 	public CartServices Cservice;
 	
-	@PostMapping("/add/{pid}/{key}")
-	public ResponseEntity<Cart>addProductToCartHandler(@PathVariable("pid") Integer pid,@PathVariable("key") String key ) throws LoginException, CustomerException, ProductException
+	@PostMapping("/add/{pid}/{q}/{key}")
+	public ResponseEntity<Cart>addProductToCartHandler(@PathVariable("pid") Integer pid,@PathVariable("q") Integer quantity,@PathVariable("key") String key ) throws LoginException, CustomerException, ProductException
 	{
-		Cart updatedCart = Cservice.addProductToCart(pid,  key);
+		Cart updatedCart = Cservice.addProductToCart(pid,quantity,  key);
 		
 		return new ResponseEntity<Cart>(updatedCart,HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/remove/{pDtoId}/{key}")
-	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pDtoId") Integer pDtoId,@PathVariable("key") String key) throws LoginException, CustomerException
+	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pDtoId") Integer pDtoId,@PathVariable("key") String key) throws LoginException, CustomerException, CartException,ProductException
 	{
 		ProductDto product = Cservice.removeproductFromCart(pDtoId, key);
 		
