@@ -19,15 +19,16 @@ public interface CartServices {
 
    
 	
-	public ProductDto updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
+//	public ProductDto updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
+//	
+//	public Cart addProductToCart(Integer pid,  Integer quantity, String key) throws CustomerException, LoginException, ProductException;
 	
 	public Cart addProductToCart(Integer pid,  Integer quantity, String key) throws CustomerException, LoginException, ProductException;
 	
-	public List<ProductDto> viewAllProductsFromCart ( String key)throws CustomerException,LoginException,ProductException;
+	public List<ProductDto> viewAllProductsFromCart(String key) throws CustomerException, LoginException, ProductException;
 	
 	public double cartTotal(String key)throws CustomerException, LoginException, ProductException;
 	
-	 public ProductDto removeproductFromCart(Integer pDtoid,String key)  throws CustomerException, LoginException, CartException,ProductException;
 	}
 
 	
