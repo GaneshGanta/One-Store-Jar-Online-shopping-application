@@ -2,6 +2,7 @@ package com.onestore.serviceImplementation;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,25 @@ public class LoginServiceImpl implements LoginService{
 
 	@Override
 	public String LoginYourAccount(User user) throws LoginException{
+		
+		
+		if(user.getRole().equals("admin")) {
+			
+			String key = RandomString.make(6);
+	        Random rand = new Random();
+
+	        int rand_int1 = rand.nextInt(100);
+
+			
+			CurrentUserSession userSession = new CurrentUserSession(rand_int1,key,LocalDateTime.now(),user.getEmail(),user.getPassword(),user.getRole());
+			sessionD.save(userSession);
+			return userSession.toString();
+			
+			
+			
+		}
+		
+		
 	
 		Customer existingCust = custD.findByEmail(user.getEmail());
 		
