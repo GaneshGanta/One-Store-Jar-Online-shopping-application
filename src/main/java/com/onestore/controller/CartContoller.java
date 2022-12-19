@@ -42,13 +42,13 @@ public class CartContoller {
 	
 	
 	
-	@PutMapping("/update/{pDtoId}/{q}/{key}")
-	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
+// 	@PutMapping("/update/{pDtoId}/{q}/{key}")
+// 	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
 		
-		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
+// 		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
 		
-		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
-	}
+// 		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
+// 	}
 	
 	@GetMapping("/view/{key}") 
 	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException,ProductException{
