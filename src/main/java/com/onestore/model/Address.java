@@ -57,9 +57,7 @@ public class Address {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Customer> Customer;
 	
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL,mappedBy="address")
-	private List<Order> order;
+	
 
 	@Override
 	public String toString() {

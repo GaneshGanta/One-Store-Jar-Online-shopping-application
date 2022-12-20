@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.onestore.exception.AddressException;
 import com.onestore.exception.CartException;
 import com.onestore.exception.CustomerException;
 import com.onestore.exception.LoginException;
@@ -42,7 +43,9 @@ public class OrderServiceImpl implements OrderService{
 	
 
 	@Override
-	public Order addOrder(Order order, Integer addressId, String key) throws LoginException, CustomerException, CartException, ProductException {
+	public Order addOrder(Order order, String key) throws LoginException, CustomerException, CartException, ProductException {
+		 
+		
 		
 		//validating customer and getting the customer object
 		Customer customer = valid.validateLogin(key);
@@ -51,7 +54,6 @@ public class OrderServiceImpl implements OrderService{
 		//getting product list from cart and add it to order product list and empty cart
 		Cart custCart = customer.getCart();
 		
-		
 		List<ProductDto> productList = custCart.getProducts();
 		
 		
@@ -59,12 +61,16 @@ public class OrderServiceImpl implements OrderService{
 			throw new OrderException("Your Cart is Empty! Please Add Products to your cart before Ordering");
 		}else {
 			order.setProductList(productList);
+			order.setCustomer(customer);
+//			if(customer.getAddress()==null) {
+//				throw new AddressException("Add Address before Order!");
+//			}
 			
-			order.setAddress(customer.getAddress());
 			customer.getCart().setProducts(new ArrayList<>());
 		}
-		System.out.println(productList+" Workign Until This");
+		
 		Order new_order = orderRepo.save(order);
+		
 		customer = customerRepo.save(customer);		
 		if(customer==null) {
 			throw new CustomerException("Order: Error while emptying the cart!");
@@ -81,6 +87,7 @@ public class OrderServiceImpl implements OrderService{
 				}else {
 					
 					Product product = eachProduct.get();
+					
 					if(product.getQuantity()<prod.getQuantity()) {
 						throw new OrderException("Order quantity of product "+product.getProductId()+" exceeds available quanity("+product.getQuantity()+")");
 					}
@@ -88,10 +95,10 @@ public class OrderServiceImpl implements OrderService{
 					prodRepo.save(product);
 				}
 				
-			}
+		}
 			
 			
-			return order;
+			return new_order;
 		}else {
 			throw new OrderException("Error Creating Order!");
 		}
@@ -103,8 +110,13 @@ public class OrderServiceImpl implements OrderService{
 	public Order updateOrder(Order orderUpdate, String key) throws LoginException, CustomerException, ProductException {
 		//just validation
 		Customer customer = valid.validateLogin(key);
+		//System.out.print(orderUpdate.toString());
+		if(orderUpdate.getProductList()==null) {
+			throw new OrderException("Order doesn't contain any product to update");
+		}
 		
 		List<ProductDto> productList = orderUpdate.getProductList();
+		
 		for(ProductDto prod:productList) {
 			
 			Integer prodId = prod.getProductId();
@@ -125,7 +137,6 @@ public class OrderServiceImpl implements OrderService{
 		Optional<Order> existingOrder = orderRepo.findById(orderUpdate.getOrderId());
 		if(existingOrder.isPresent()) {
 			Order order = existingOrder.get();
-			order.setAddress(orderUpdate.getAddress());
 			order.setOrderDate(orderUpdate.getOrderDate());
 			order.setOrderStatus(orderUpdate.getOrderStatus());
 			order.setProductList(orderUpdate.getProductList());
@@ -142,21 +153,24 @@ public class OrderServiceImpl implements OrderService{
 	public Order removeOrder(Integer orderID, String key) throws LoginException, CustomerException {
 		//login validation
 		Customer customer = valid.validateLogin(key);
-	    List<Order> customer_order_list	 = customer.getOrder();
-	    boolean flag = false;
-		for(Order od : customer_order_list) {
-			if(od.getOrderId()==orderID) {
-				flag = true;
-			}
-		}
-		if(flag)
-		{
+//	    List<Order> customer_order_list	 = customer.getOrder();
+//	    boolean flag = false;
+//	    if(customer_order_list.isEmpty()) {
+//	    	throw new OrderException("No Orders found to remove");
+//	    }
+//		for(Order od : customer_order_list) {
+//			if(od.getOrderId()==orderID) {
+//				flag = true;
+//			}
+//		}
+//		if(flag)
+//		{
 		Order deleted_order = orderRepo.findById(orderID).orElseThrow(()-> new OrderException("Order Not Found!"));
 		orderRepo.delete(deleted_order);
 		return deleted_order;
-		}else {
-			throw new OrderException("Current User Doesn't have this order with orderid "+orderID);
-		}
+//		}else {
+//			throw new OrderException("Current User Doesn't have this order with orderid "+orderID);
+//		}
 		
 		
 		
@@ -184,8 +198,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Order> viewAllOrderByLocation(String location) {
+	public List<Order> viewAllOrderByLocation(String location, String key) throws LoginException, CustomerException {
 		// TODO Auto-generated method stub
+		Customer customer = valid.validateLogin(key);
 		List<Order> orderList = orderRepo.findAll();
 		if(orderList.isEmpty()){
 			throw new OrderException("No Orders Available in Database!");
@@ -193,7 +208,7 @@ public class OrderServiceImpl implements OrderService{
 			
 			List<Order> newOrderList = new ArrayList<>();
 			for(Order order: orderList) {
-				if(order.getAddress().getCity()==location)
+				if(order.getCustomer().getAddress().getCity()==location)
 					newOrderList.add(order);
 			}
 			if(newOrderList.isEmpty()) {

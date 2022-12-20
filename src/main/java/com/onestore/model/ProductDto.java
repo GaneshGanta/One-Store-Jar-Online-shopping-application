@@ -1,16 +1,21 @@
 package com.onestore.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+@Component
 @Entity
 @Getter
 @Setter
@@ -54,8 +59,9 @@ public class ProductDto {
 	@ManyToOne(cascade=CascadeType.ALL)
 	private Cart cart;
 	
-
-
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Order> orderList;
+	
 	
 
 }

@@ -48,9 +48,6 @@ public class Product {
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	private Cart cart;
 	//mapped by should be in product entity not in order
-	@ManyToMany(cascade = CascadeType.ALL,mappedBy = "productList")
-	@JsonIgnore
-	private List<Order> order;
 	
 	
 
