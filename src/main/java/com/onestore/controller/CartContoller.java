@@ -42,13 +42,25 @@ public class CartContoller {
 	
 	
 	
-// 	@PutMapping("/update/{pDtoId}/{q}/{key}")
-// 	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
+     @DeleteMapping("/delete/{pdtoid}/{key}")
+    public ResponseEntity<ProductDto> deleteProductHandler(@PathVariable("pdtoid")Integer pDtoId,@PathVariable("key") String key)throws CustomerException, LoginException, ProductException{
+    	
+		ProductDto	product=Cservice.DeleteproductFromCart(pDtoId, key);
 		
-// 		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
+		return new  ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
+    }
+	
+	
+	
+	@PutMapping("/update/{pDtoId}/{q}/{key}")
+ 	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
 		
-// 		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
-// 	}
+ 		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
+		
+ 		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
+ 	}
+	
+	
 	
 	@GetMapping("/view/{key}") 
 	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException,ProductException{
@@ -57,8 +69,9 @@ public class CartContoller {
 		return new ResponseEntity<List<ProductDto>>(productlist,HttpStatus.OK);
 	}
 	
-	@GetMapping("/total/{key}")
 	
+	
+	@GetMapping("/total/{key}")
 	public ResponseEntity<Integer> CartContoller(@PathVariable("key") String key) throws LoginException, CustomerException, ProductException{
 		double cartTotal =  Cservice.cartTotal(key);
 		return new  ResponseEntity<Integer>((int) cartTotal,HttpStatus.OK);
