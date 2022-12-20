@@ -10,6 +10,10 @@ import com.onestore.model.Cart;
 @Repository
 public interface CartDao extends JpaRepository<Cart, Integer>{
    
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 1bfac2d6ba218535ef2dfbf1a507ef40ef2dc3f6
 	
 }

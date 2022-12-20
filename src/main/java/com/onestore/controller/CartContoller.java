@@ -38,27 +38,20 @@ public class CartContoller {
 		return new ResponseEntity<Cart>(updatedCart,HttpStatus.ACCEPTED);
 	}
 	
-	@DeleteMapping("/remove/{pDtoId}/{key}")
-	public ResponseEntity<ProductDto>removeProductFromCartHandler(@PathVariable("pDtoId") Integer pDtoId,@PathVariable("key") String key) throws LoginException, CustomerException, CartException,ProductException
-	{
-		ProductDto product = Cservice.removeproductFromCart(pDtoId, key);
+
+	
+	
+	
+// 	@PutMapping("/update/{pDtoId}/{q}/{key}")
+// 	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
 		
-		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
-	}
-	
-	
-	
-	
-	@PutMapping("/update/{pDtoId}/{q}/{key}")
-	public ResponseEntity<ProductDto>updateProductQuantityHandler(@PathVariable("pDtoId")Integer pDtoId,@PathVariable("q") Integer quantity,@PathVariable("key") String key) throws LoginException, CustomerException{
+// 		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
 		
-		           ProductDto product =Cservice.updateProductQuantity(pDtoId, quantity, key);
-		
-		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
-	}
+// 		return new ResponseEntity<ProductDto>(product,HttpStatus.ACCEPTED);
+// 	}
 	
 	@GetMapping("/view/{key}") 
-	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException{
+	public ResponseEntity<List<ProductDto>>viewAllProducts(@PathVariable("key") String key) throws LoginException, CustomerException,ProductException{
 		         List<ProductDto> productlist = Cservice.viewAllProductsFromCart(key);
 		         
 		return new ResponseEntity<List<ProductDto>>(productlist,HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.onestore.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class Cart {
 	
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<ProductDto> products;
+	@OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
+	private List<ProductDto> products=new ArrayList<ProductDto>();;
 	
 }

@@ -23,9 +23,21 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity<String> LoginUser( @RequestBody User user ){
 		
-		System.out.println(user);
-         String login = service.LoginYourAccount(user);
-		 return new ResponseEntity<String>(login,HttpStatus.OK);
+		if(user.getEmail().equals("admin@gmail.com") && user.getPassword().equalsIgnoreCase("admin")) {
+			
+			user.setRole("admin");
+			
+			String login = service.LoginYourAccount(user);
+			 return new ResponseEntity<String>(login,HttpStatus.OK);
+			
+		}else {
+			
+			user.setRole("customer");
+			
+			 String login = service.LoginYourAccount(user);
+			 return new ResponseEntity<String>(login,HttpStatus.OK);
+			
+		}
 		
 	}
 	
