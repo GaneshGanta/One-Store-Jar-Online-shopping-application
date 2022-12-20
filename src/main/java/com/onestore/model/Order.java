@@ -38,17 +38,16 @@ public class Order {
 	
 	private String orderStatus;
 	
-	@JsonIgnore
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	
-	@JsonIgnore
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<ProductDto> productList;
 	
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Address address;
+	
+	
 
 	@Override
 	public String toString() {

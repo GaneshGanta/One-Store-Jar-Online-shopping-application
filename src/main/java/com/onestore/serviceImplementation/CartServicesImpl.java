@@ -51,6 +51,9 @@ public class CartServicesImpl implements CartServices{
 	private Validation valid;
 	
 	
+	
+	
+	
 	@Override
 	public Cart addProductToCart(Integer pid,Integer quantity, String key) throws CustomerException, LoginException, ProductException {
 		    
@@ -110,15 +113,14 @@ public class CartServicesImpl implements CartServices{
 
 	
 	@Override   ///this method is not working only other are working......................
-	public ProductDto removeproductFromCart(Integer  pDtoId, String key) throws CustomerException, LoginException,CartException, ProductException{
-		
+	public ProductDto removeproductFromCart(Integer  productId, String key) throws CustomerException, LoginException,CartException, ProductException{
 		return null;
+	
+			
+			
 		
 	}
-	
-	
-	
-	
+
 	
 	
 

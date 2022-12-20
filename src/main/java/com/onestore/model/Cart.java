@@ -2,6 +2,8 @@ package com.onestore.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.lang.Integer;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
@@ -53,7 +55,5 @@ public class Cart {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<ProductDto> products;
-	
-
 	
 }

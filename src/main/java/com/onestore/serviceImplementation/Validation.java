@@ -30,11 +30,6 @@ public class Validation {
 		return loggedCustomer;
 
 		
-		             
-		             
-		             
-		
-		
 		
 	}
 
