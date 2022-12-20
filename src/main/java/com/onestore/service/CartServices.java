@@ -19,9 +19,9 @@ public interface CartServices {
 
    
 	
-//	public ProductDto updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
-//	
-//	public Cart addProductToCart(Integer pid,  Integer quantity, String key) throws CustomerException, LoginException, ProductException;
+	public ProductDto updateProductQuantity( Integer pid, Integer quantity, String key) throws CustomerException, LoginException ;
+	
+        public ProductDto DeleteproductFromCart(Integer pDtoid, String key)throws CustomerException, LoginException, ProductException;
 	
 	public Cart addProductToCart(Integer pid,  Integer quantity, String key) throws CustomerException, LoginException, ProductException;
 	
