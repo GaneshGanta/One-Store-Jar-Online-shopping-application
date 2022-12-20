@@ -166,21 +166,7 @@ public class CartServicesImpl implements CartServices{
 		return updatedCart;
 	}
 
-<<<<<<< HEAD
-	
-	@Override   ///this method is not working only other are working......................
-	public ProductDto removeproductFromCart(Integer  productId, String key) throws CustomerException, LoginException,CartException, ProductException{
-		return null;
-	
-			
-			
-		
-	}
 
-	
-	
-=======
->>>>>>> 1bfac2d6ba218535ef2dfbf1a507ef40ef2dc3f6
 
 
 
