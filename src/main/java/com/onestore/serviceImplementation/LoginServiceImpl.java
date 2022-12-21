@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService{
 		
 		
 		if(user.getRole().equals("admin")) {
-			
+			System.out.println("***************************************");
 			String key = RandomString.make(6);
 	        Random rand = new Random();
 
